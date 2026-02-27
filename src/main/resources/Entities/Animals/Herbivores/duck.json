@@ -1,0 +1,13 @@
+{
+  "name" : "duck",
+  "view" : "\uD83E\uDD86",
+  "type" : "herbivores",
+  "weight" : 1,
+  "max_count_in_cell" : 200,
+  "speed_cell" : 4,
+  "eat_full_how_many" : 0.15,
+  "eat_chance" : {
+    "caterpillar" : 90,
+    "grass" : 100
+  }
+}

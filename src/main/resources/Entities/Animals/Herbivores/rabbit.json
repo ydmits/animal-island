@@ -1,0 +1,12 @@
+{
+  "name" : "rabbit",
+  "view" : "\uD83D\uDC07",
+  "type" : "herbivores",
+  "weight" : 2,
+  "max_count_in_cell" : 150,
+  "speed_cell" : 2,
+  "eat_full_how_many" : 0.45,
+  "eat_chance" : {
+    "grass" : 100
+  }
+}

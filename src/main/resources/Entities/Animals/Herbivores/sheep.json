@@ -1,0 +1,12 @@
+{
+  "name" : "sheep",
+  "view" : "\uD83D\uDC11",
+  "type" : "herbivores",
+  "weight" : 70,
+  "max_count_in_cell" : 140,
+  "speed_cell" : 3,
+  "eat_full_how_many" : 15,
+  "eat_chance" : {
+    "grass" : 100
+  }
+}

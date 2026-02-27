@@ -1,0 +1,13 @@
+{
+  "name" : "deer",
+  "view" : "\uD83E\uDD8C",
+  "type" : "herbivores",
+  "weight" : 300,
+  "max_count_in_cell" : 20,
+  "speed_cell" : 4,
+  "eat_full_how_many" : 50,
+  "eat_chance" : {
+    "caterpillar" : 0,
+    "grass" : 100
+  }
+}

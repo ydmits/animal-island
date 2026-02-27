@@ -1,0 +1,13 @@
+{
+  "name" : "boar",
+  "view" : "\uD83D\uDC17",
+  "type" : "herbivores",
+  "weight" : 400,
+  "max_count_in_cell" :50,
+  "speed_cell" : 2,
+  "eat_full_how_many" : 50,
+  "eat_chance" : {
+    "caterpillar" : 90,
+    "grass" : 100
+  }
+}

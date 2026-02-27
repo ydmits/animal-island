@@ -1,0 +1,13 @@
+{
+  "name" : "mouse",
+  "view" : "\uD83D\uDC2D",
+  "type" : "herbivores",
+  "weight" : 0.05,
+  "max_count_in_cell" : 500,
+  "speed_cell" : 1,
+  "eat_full_how_many" : 0.01,
+  "eat_chance" : {
+    "caterpillar" : 90,
+    "grass" : 100
+  }
+}
