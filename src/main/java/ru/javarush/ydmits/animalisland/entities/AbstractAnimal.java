@@ -9,7 +9,8 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class AbstractAnimal extends BasicObject implements Eating, Reproduction, Cloneable {
+@EqualsAndHashCode(callSuper = true)
+public abstract class AbstractAnimal extends BasicObject implements Eating, Reproduction, Cloneable, Moving {
     @JsonProperty("speed_cell")
     protected int speedCell;
 
@@ -46,5 +47,9 @@ public abstract class AbstractAnimal extends BasicObject implements Eating, Repr
         }
 
         return cloned;
+    }
+
+    public void move() {
+
     }
 }

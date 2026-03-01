@@ -2,12 +2,14 @@ package ru.javarush.ydmits.animalisland.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Predators extends AbstractAnimal{
 
     @Override
