@@ -14,6 +14,8 @@ public class Main {
         System.out.println(Property.ISLAND_WIDTH);
         Set<BasicObject> sss = Property.ISLAND_EINTRIES;
         System.out.println(123);
+        Predators predators = new Predators();
+
 
     }
 }

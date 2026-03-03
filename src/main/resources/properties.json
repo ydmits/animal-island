@@ -1,4 +1,12 @@
 {
   "island_length" : 5,
-  "island_width" : 10
+  "island_width" : 10,
+  "epsilon" : 0.0001,
+  "coeficient_eating" : 1.25,
+  "default_eat_chance" : 100,
+  "is_alive_default" : true,
+  "is_need_eat_default" : false,
+  "coeficient_hunger" : 0.8,
+  "coeficient_full_eat" : 1.2,
+  "max_delta_weight" : 0.5
 }

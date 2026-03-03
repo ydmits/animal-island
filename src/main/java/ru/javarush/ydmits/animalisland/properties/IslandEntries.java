@@ -1,12 +1,10 @@
 package ru.javarush.ydmits.animalisland.properties;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.javarush.ydmits.animalisland.entities.BasicObject;
-import ru.javarush.ydmits.animalisland.entities.Herbivores;
-import ru.javarush.ydmits.animalisland.entities.Plants;
-import ru.javarush.ydmits.animalisland.entities.Predators;
+import ru.javarush.ydmits.animalisland.entities.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,5 +50,42 @@ public enum IslandEntries {
         }
 
         return objects;
+    }
+
+    public static int getChanceEat(BasicObject thisObject, BasicObject otherObject) {
+        int chance = 0;
+
+        String thisName = thisObject.getName();
+
+        if (otherObject instanceof AbstractAnimal) {
+            AbstractAnimal abstractAnimal = (AbstractAnimal) otherObject;
+            Map<String, Integer> eatChance = abstractAnimal.getEatChance();
+
+            chance = eatChance.getOrDefault(thisName, 0);
+        }
+
+        return chance;
+    }
+
+    public static double getWeightByName(String name) {
+        Set<BasicObject> islandEntries = Property.ISLAND_EINTRIES;
+
+        for (BasicObject entries : islandEntries) {
+            String eintryName = entries.getName();
+
+            if (name.equals(eintryName)) {
+                double eintryWeight = entries.getWeight();
+
+                return eintryWeight;
+            }
+        }
+        return 0;
+    }
+
+    public static List<BasicObject> getAliveObjects(List<BasicObject> localBasicObjects) {
+        return localBasicObjects
+                .stream()
+                .filter(BasicObject::isAlive)
+                .toList();
     }
 }

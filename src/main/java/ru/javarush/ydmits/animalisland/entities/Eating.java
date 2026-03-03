@@ -1,6 +1,8 @@
 package ru.javarush.ydmits.animalisland.entities;
 
+import java.util.List;
+
 public interface Eating {
-    void eat(BasicObject basicObject);
+    List<BasicObject> eat(List<BasicObject> localBasicObjects);
 
 }
