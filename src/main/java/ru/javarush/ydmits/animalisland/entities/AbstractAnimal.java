@@ -29,6 +29,29 @@ public abstract class AbstractAnimal extends BasicObject implements Eating, Repr
 
     protected double maxWeightAnimal = weight + (weight * Property.MAX_DELTA_WEIGHT);
 
+    protected double canReproductWeight = weight * Property.COEFFICIENT_REPRODUCTION;
+
+    public void action() {
+        boolean isDeadNextTick = (weight * Property.COEFICIENT_HUNGER) + Property.EPSILON < minWeightAnimal;
+        boolean canReprodct = weight + Property.EPSILON >= canReproductWeight;
+        boolean canReproductHere = bitController.canReproductHere();
+
+        if(isDeadNextTick) {
+            List<BasicObject> eatObjects = bitController.getLocalBasicObjects();
+            eat(eatObjects);
+        }
+        else if (canReprodct && canReproductHere) {
+            AbstractAnimal baby = (AbstractAnimal) reproduct();
+            bitController.addToAddList(baby);
+        }
+        else {
+            List<IslandBit> islandBitsForMoving = bitController.getBitsForMoving();
+            IslandBit newBit = move(islandBitsForMoving);
+            bitController.addToRemoveList();
+            bitController.addToAddList(newBit);
+        }
+    }
+
     public List<BasicObject> eat(List<BasicObject> localBasicObjects) {
         int countTryEat = getCountTryEat();
 
@@ -37,7 +60,7 @@ public abstract class AbstractAnimal extends BasicObject implements Eating, Repr
         int tryEat = 0;
         double weightEat = 0.0;
 
-        while (eatingObjects.size() > 0 && tryEat < countTryEat && (weightEat + Property.EPSILON) > eatFullHowMany) {
+        while (eatingObjects.size() > 0 && tryEat < countTryEat && (weightEat + Property.EPSILON) < eatFullHowMany) {
             int indexEatObject = ThreadLocalRandom.current().nextInt(eatingObjects.size());
 
             BasicObject eat = eatingObjects.get(indexEatObject);
@@ -46,6 +69,8 @@ public abstract class AbstractAnimal extends BasicObject implements Eating, Repr
                 eat.setAlive(false);
                 weightEat += eat.getWeight();
                 eatingObjects.remove(indexEatObject);
+
+                bitController.addToRemoveList(eat);
             }
             tryEat++;
         }
@@ -110,19 +135,17 @@ public abstract class AbstractAnimal extends BasicObject implements Eating, Repr
 
         if (weight < minWeightAnimal) {
             this.setAlive(false);
+            bitController.addToRemoveList();
         }
 
     }
 
 
     public AbstractAnimal reproduct() {
-        try {
-            AbstractAnimal baby = this.clone();
-            updateWeight(0);
-            return baby;
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+        AbstractAnimal baby = (AbstractAnimal) IslandEntries.getBaby(this);
+        updateWeight(0);
+
+        return baby;
     }
 
     @Override

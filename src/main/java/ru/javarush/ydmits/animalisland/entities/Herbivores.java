@@ -18,4 +18,9 @@ public class Herbivores extends AbstractAnimal {
         return (Herbivores) super.reproduct();
     }
 
+    @Override
+    public Herbivores clone() throws CloneNotSupportedException{
+        return (Herbivores) super.clone();
+    }
+
 }

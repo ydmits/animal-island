@@ -18,7 +18,7 @@ public class Property {
     public static final double COEFICIENT_HUNGER;
     public static final double COEFICIENT_FULL_EAT;
     public static final double MAX_DELTA_WEIGHT;
-
+    public static final double COEFFICIENT_REPRODUCTION;
 
     public static final boolean IS_ALIVE_DEFAULT;
     public static final boolean IS_NEED_EAT_DEFAULT;
@@ -30,6 +30,11 @@ public class Property {
     public static final String TYPE_PLANTS = "plants";
     public static final String TYPE_HERBIVORES = "herbivores";
     public static final String TYPE_PREDATORS = "predators";
+    public static final String DEFAULT_VIEW;
+    public static final String PLANTS_VIEW;
+    public static final String HERBIVORES_VIEW;
+    public static final String PREDATORS_VIEW;
+    public static final String DELIMITER;
 
 
     static {
@@ -53,6 +58,12 @@ public class Property {
         COEFICIENT_HUNGER = (double) property.getOrDefault("coeficient_hunger", 0.8);
         COEFICIENT_FULL_EAT = (double) property.getOrDefault("coeficient_full_eat", 1.2);
         MAX_DELTA_WEIGHT = (double) property.getOrDefault("max_delta_weight", 0.5);
+        COEFFICIENT_REPRODUCTION = (double) property.getOrDefault("coefficient_reproduction", 1.25);
+        DEFAULT_VIEW = (String) property.getOrDefault("default_view", "?");
+        PLANTS_VIEW = (String) property.getOrDefault("plants_view", "\uD83C\uDF31");
+        HERBIVORES_VIEW = (String) property.getOrDefault("herbivores_view", "\uD83D\uDC04");
+        PREDATORS_VIEW = (String) property.getOrDefault("predators_view", "\uD83D\uDC3A");
+        DELIMITER = (String) property.getOrDefault("delimiter", "\uD83D\uDFE9");
 
         ISLAND_EINTRIES = IslandEntries.castIslandEntries(islandObjects);
 

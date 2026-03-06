@@ -16,4 +16,9 @@ public class Predators extends AbstractAnimal{
     public Predators reproduct() {
         return (Predators) super.reproduct();
     }
+
+    @Override
+    public Predators clone() throws CloneNotSupportedException{
+        return (Predators) super.clone();
+    }
 }

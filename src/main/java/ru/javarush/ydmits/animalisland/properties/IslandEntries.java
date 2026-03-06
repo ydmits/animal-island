@@ -88,4 +88,60 @@ public enum IslandEntries {
                 .filter(BasicObject::isAlive)
                 .toList();
     }
+
+    public static boolean canDoAction(BasicObject basicObject) {
+        boolean result = false;
+
+        if(basicObject.getClass().equals(IslandEntries.HERBIVORES) ||
+                basicObject.getClass().equals(IslandEntries.PREDATORS) ) {
+            result = true;
+
+        }
+
+        return result;
+    }
+
+    public static BasicObject getBaby(BasicObject basicObject) {
+        Set<BasicObject> basicObjects = Property.ISLAND_EINTRIES;
+
+        BasicObject cloned = null;
+
+        String name = basicObject.getName();
+
+        for (BasicObject object : basicObjects) {
+            if(name.equals(object.getName())) {
+                try {
+                    cloned = object.clone();
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return cloned;
+    }
+
+    public static int getRadiusForMoving(BasicObject basicObject) {
+        int result = 0;
+
+        if(basicObject instanceof AbstractAnimal) {
+            AbstractAnimal abstractAnimal = (AbstractAnimal) basicObject;
+            result = abstractAnimal.getSpeedCell();
+        }
+
+        return result;
+    }
+
+    public static String getStringViewObject(BasicObject basicObject) {
+        String result = Property.DEFAULT_VIEW;
+
+        if (HERBIVORES.equals(basicObject.getClass())) {
+            result = Property.HERBIVORES_VIEW;
+        } else if (PREDATORS.equals(basicObject.getClass())) {
+            result = Property.PREDATORS_VIEW;
+        } else if (PLANTS.equals(basicObject.getClass())) {
+            result = Property.PLANTS_VIEW;
+        }
+
+        return result;
+    }
 }
