@@ -23,34 +23,45 @@ public abstract class AbstractAnimal extends BasicObject implements Eating, Repr
     @JsonProperty("eat_chance")
     protected Map<String, Integer> eatChance;
 
-    protected boolean isNeedEat = Property.IS_NEED_EAT_DEFAULT;
+    @JsonProperty("is_need_eat")
+    protected boolean isNeedEat;
 
-    protected double minWeightAnimal = weight - (weight * Property.MAX_DELTA_WEIGHT);
+    @JsonProperty("min_weight_animal")
+    protected double minWeightAnimal;
 
-    protected double maxWeightAnimal = weight + (weight * Property.MAX_DELTA_WEIGHT);
+    @JsonProperty("max_weight_animal")
+    protected double maxWeightAnimal;
 
-    protected double canReproductWeight = weight * Property.COEFFICIENT_REPRODUCTION;
+    @JsonProperty("can_reproduct_weight")
+    protected double canReproductWeight;
 
     public void action() {
         boolean isDeadNextTick = (weight * Property.COEFICIENT_HUNGER) + Property.EPSILON < minWeightAnimal;
         boolean canReprodct = weight + Property.EPSILON >= canReproductWeight;
         boolean canReproductHere = bitController.canReproductHere();
 
-        if(isDeadNextTick) {
+        int command = ThreadLocalRandom.current().nextInt(3);
+
+        if (isDeadNextTick || command == 0) {
             List<BasicObject> eatObjects = bitController.getLocalBasicObjects();
             eat(eatObjects);
         }
-        else if (canReprodct && canReproductHere) {
+        else if((canReprodct && canReproductHere) && command == 1) {
             AbstractAnimal baby = (AbstractAnimal) reproduct();
             bitController.addToAddList(baby);
         }
-        else {
+        else if (command == 2){
             List<IslandBit> islandBitsForMoving = bitController.getBitsForMoving();
             IslandBit newBit = move(islandBitsForMoving);
             bitController.addToRemoveList();
             bitController.addToAddList(newBit);
         }
+        else {
+            updateWeight(0);
+        }
+
     }
+
 
     public List<BasicObject> eat(List<BasicObject> localBasicObjects) {
         int countTryEat = getCountTryEat();
@@ -155,6 +166,7 @@ public abstract class AbstractAnimal extends BasicObject implements Eating, Repr
         if (this.eatChance != null) {
             cloned.eatChance = new HashMap<>(this.eatChance);
         }
+        cloned.setBitController(bitController);
 
         return cloned;
     }

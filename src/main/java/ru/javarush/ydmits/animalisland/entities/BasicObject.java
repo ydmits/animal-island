@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import ru.javarush.ydmits.animalisland.controllers.BitController;
 import ru.javarush.ydmits.animalisland.properties.Property;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class BasicObject implements Living, Cloneable {
+    @EqualsAndHashCode.Include
+    protected String id;
     protected String name;
     protected String view;
     protected String type;
@@ -19,6 +22,10 @@ public abstract class BasicObject implements Living, Cloneable {
     protected boolean isAlive = Property.IS_ALIVE_DEFAULT;
 
     protected BitController bitController;
+
+    {
+        this.id = UUID.randomUUID().toString();
+    }
 
     public boolean isAlive() {
         return this.isAlive;
@@ -31,7 +38,7 @@ public abstract class BasicObject implements Living, Cloneable {
     @Override
     public BasicObject clone() throws CloneNotSupportedException {
         BasicObject cloned = (BasicObject) super.clone();
-
+        cloned.id = UUID.randomUUID().toString();
         return cloned;
     }
 }

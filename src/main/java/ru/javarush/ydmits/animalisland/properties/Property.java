@@ -4,6 +4,7 @@ import ru.javarush.ydmits.animalisland.entities.BasicObject;
 import ru.javarush.ydmits.animalisland.file.FileLoader;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ public class Property {
     public static final int ISLAND_LENGTH;
     public static final int ISLAND_WIDTH;
     public static final int DEFAULT_EAT_CHANCE;
+    public static final int TIME_FOR_GAME_SIMULATION_SEC;
 
     public static final double EPSILON;
     public static final double COEFICIENT_EATING;
@@ -25,6 +27,8 @@ public class Property {
 
     public static final Set<BasicObject> ISLAND_EINTRIES;
 
+    public static final Map<String, Integer> EMPTY_ISLAND;
+
     public static final String PROPERTIES_FILE_NAME = "properties.json";
     public static final String ISLAND_OBJECTS_DIR = "Entities";
     public static final String TYPE_PLANTS = "plants";
@@ -35,6 +39,12 @@ public class Property {
     public static final String HERBIVORES_VIEW;
     public static final String PREDATORS_VIEW;
     public static final String DELIMITER;
+
+    public static final Map<String, Integer> DEFAULT_EMPTY_ISLAND = Map.of(
+            "\uD83C\uDF31", 0,
+            "\uD83D\uDC04", 0,
+            "\uD83D\uDC3A", 0
+    );
 
 
     static {
@@ -64,6 +74,8 @@ public class Property {
         HERBIVORES_VIEW = (String) property.getOrDefault("herbivores_view", "\uD83D\uDC04");
         PREDATORS_VIEW = (String) property.getOrDefault("predators_view", "\uD83D\uDC3A");
         DELIMITER = (String) property.getOrDefault("delimiter", "\uD83D\uDFE9");
+        TIME_FOR_GAME_SIMULATION_SEC = (int) property.getOrDefault("time_for_game_simulation_sec", 60);
+        EMPTY_ISLAND = (Map<String, Integer>) property.getOrDefault("empty_island", DEFAULT_EMPTY_ISLAND);
 
         ISLAND_EINTRIES = IslandEntries.castIslandEntries(islandObjects);
 

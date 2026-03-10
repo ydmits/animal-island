@@ -1,6 +1,6 @@
 {
   "island_length" : 5,
-  "island_width" : 10,
+  "island_width" : 5,
   "epsilon" : 0.0001,
   "coeficient_eating" : 1.25,
   "default_eat_chance" : 100,
@@ -14,5 +14,12 @@
   "plants_view" : "\uD83C\uDF31",
   "herbivores_view" : "\uD83D\uDC04",
   "predators_view" : "\uD83D\uDC3A",
-  "delimiter" : "\uD83D\uDFE9"
+  "delimiter" : "+ ",
+  "time_for_game_simulation_sec" : 60,
+  "empty_island" :
+  {
+    "\uD83C\uDF31": 0,
+    "\uD83D\uDC04": 0,
+    "\uD83D\uDC3A": 0
+  }
 }

@@ -9,14 +9,19 @@ import java.util.List;
 public class Island {
     private IslandBit[][] islandBits = new IslandBit[Property.ISLAND_WIDTH][Property.ISLAND_LENGTH];
 
+    private boolean isEmpty;
+
     public Island() {
         for (int i = 0; i < islandBits.length; i++) {
             for (int j = 0; j < islandBits[i].length; j++) {
-                islandBits[i][j] = new IslandBit(i, j);
+                BitController bitController = new BitController();
+                bitController.setIsland(this);
+                islandBits[i][j] = new IslandBit(i, j, bitController);
 
-                setBitcontroller(islandBits[i][j]);
             }
         }
+
+        this.isEmpty = false;
     }
 
     public void action() {
@@ -25,12 +30,28 @@ public class Island {
                 islandBits[i][j].action();
             }
         }
+
+        checkEmpty();
     }
 
-    private void setBitcontroller(IslandBit islandBit) {
-        BitController bitController = new BitController();
-        bitController.setIsland(this);
-        islandBit.setBitController(bitController);
+    public boolean getEmpty() {
+        return isEmpty;
+    }
+
+    private void checkEmpty() {
+        int sumEmpty = 0;
+
+        for (int i = 0; i < islandBits.length; i++) {
+            for (int j = 0; j < islandBits[i].length; j++) {
+                if(islandBits[i][j].getEmpty()) {
+                    sumEmpty++;
+                }
+            }
+        }
+
+        if(sumEmpty > 0) {
+            isEmpty = true;
+        }
     }
 
     public List<IslandBit> getBitsForMoving(IslandBit currentBit, int radius) {
@@ -70,25 +91,48 @@ public class Island {
                 length < Property.ISLAND_LENGTH;
     }
 
+
     @Override
     public String toString(){
-        String[][] strings = new String[Property.ISLAND_WIDTH][Property.ISLAND_LENGTH];
+        String[][][] strParts = new String[Property.ISLAND_WIDTH][Property.ISLAND_LENGTH][];
 
-        for (int i = 0; i < strings.length; i++) {
-            for (int j = 0; j < strings[i].length; j++) {
-                strings[i][j] = islandBits[i][j].toString();
+        int maxHeight = 0;
+        int cellWidth = 0;
+
+        for (int i = 0; i < islandBits.length; i++) {
+            for (int j = 0; j < islandBits[i].length; j++) {
+                String cellStr = islandBits[i][j].toString();
+                strParts[i][j] = cellStr.split("\n");
+                maxHeight = Math.max(maxHeight, strParts[i][j].length);
+                if (cellWidth == 0 && strParts[i][j].length > 0) {
+                    cellWidth = strParts[i][j][0].length();
+                }
             }
         }
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder result = new StringBuilder();
 
-        for (int i = 0; i < strings.length; i++) {
-            for (int j = 0; j < strings[i].length; j++) {
-                builder.append(strings[i][j]);
+        for (int row = 0; row < Property.ISLAND_WIDTH; row++) {
+
+            for (int line = 0; line < maxHeight; line++) {
+
+                for (int col = 0; col < Property.ISLAND_LENGTH; col++) {
+
+                    if (line < strParts[row][col].length) {
+                        result.append(strParts[row][col][line]);
+                    } else {
+
+                        result.append(" ".repeat(cellWidth));
+                    }
+                    if (col < Property.ISLAND_LENGTH - 1) {
+                        result.append("\t");
+                    }
+                }
+                result.append("\n");
             }
-            builder.append("\n");
+            //result.append("\n");
         }
 
-        return builder.toString();
+        return result.toString();
     }
 }

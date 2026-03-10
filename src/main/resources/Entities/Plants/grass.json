@@ -3,5 +3,5 @@
   "view" : "\uD83C\uDF3F",
   "type" : "plants",
   "weight" : 1,
-  "max_count_in_cell" : 200
+  "max_count_in_cell" : 2000
 }

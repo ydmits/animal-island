@@ -38,7 +38,9 @@ public enum IslandEntries {
     public static Set<BasicObject> castIslandEntries(Set<Map<String, Object>> jsonContent) {
         Set<BasicObject> objects = new HashSet<>();
 
-        for (Map<String, Object> jsonMap : jsonContent) {
+        Set<Map<String, Object>> modifyAnimalJsonContent = modifyAnimalObjects(jsonContent);
+
+        for (Map<String, Object> jsonMap : modifyAnimalJsonContent) {
             String typeObject = (String) jsonMap.get("type");
             Class<? extends BasicObject> typeClass = getBasicClass(typeObject);
 
@@ -49,7 +51,33 @@ public enum IslandEntries {
             }
         }
 
+
         return objects;
+    }
+
+    private static Set<Map<String, Object>> modifyAnimalObjects (Set<Map<String, Object>> jsonContent) {
+        for(Map<String, Object> jsonMap : jsonContent) {
+            String typeObject = (String) jsonMap.get("type");
+            if (typeObject != null) {
+                if (typeObject.equals("herbivores") || typeObject.equals("predators")) {
+
+                    Object weightObj = jsonMap.getOrDefault("weight", 0.0);
+                    double weight;
+                    if (weightObj instanceof Number) {
+                        weight = ((Number) weightObj).doubleValue();
+                    } else {
+                        weight = Double.parseDouble(weightObj.toString());
+                    }
+
+                    jsonMap.put("is_need_eat", Property.IS_NEED_EAT_DEFAULT);
+                    jsonMap.put("min_weight_animal", weight - (weight * Property.MAX_DELTA_WEIGHT));
+                    jsonMap.put("max_weight_animal", weight + (weight * Property.MAX_DELTA_WEIGHT));
+                    jsonMap.put("can_reproduct_weight", weight * Property.COEFFICIENT_REPRODUCTION);
+
+                }
+            }
+        }
+        return jsonContent;
     }
 
     public static int getChanceEat(BasicObject thisObject, BasicObject otherObject) {
@@ -92,8 +120,7 @@ public enum IslandEntries {
     public static boolean canDoAction(BasicObject basicObject) {
         boolean result = false;
 
-        if(basicObject.getClass().equals(IslandEntries.HERBIVORES) ||
-                basicObject.getClass().equals(IslandEntries.PREDATORS) ) {
+        if(basicObject instanceof Herbivores || basicObject instanceof Predators) {
             result = true;
 
         }
@@ -134,14 +161,16 @@ public enum IslandEntries {
     public static String getStringViewObject(BasicObject basicObject) {
         String result = Property.DEFAULT_VIEW;
 
-        if (HERBIVORES.equals(basicObject.getClass())) {
+        if (basicObject instanceof Herbivores) {
             result = Property.HERBIVORES_VIEW;
-        } else if (PREDATORS.equals(basicObject.getClass())) {
+        } else if (basicObject instanceof Predators) {
             result = Property.PREDATORS_VIEW;
-        } else if (PLANTS.equals(basicObject.getClass())) {
+        } else if (basicObject instanceof Plants) {
             result = Property.PLANTS_VIEW;
         }
 
         return result;
     }
+
+
 }

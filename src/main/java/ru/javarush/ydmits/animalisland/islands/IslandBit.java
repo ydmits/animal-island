@@ -3,6 +3,7 @@ package ru.javarush.ydmits.animalisland.islands;
 import ru.javarush.ydmits.animalisland.controllers.BitController;
 import ru.javarush.ydmits.animalisland.entities.AbstractAnimal;
 import ru.javarush.ydmits.animalisland.entities.BasicObject;
+import ru.javarush.ydmits.animalisland.entities.Plants;
 import ru.javarush.ydmits.animalisland.properties.IslandEntries;
 import ru.javarush.ydmits.animalisland.properties.Property;
 
@@ -19,19 +20,28 @@ public class IslandBit {
 
     private BitController bitController;
 
-    public IslandBit(int width_position, int length_position) {
+    private boolean isEmpty;
+
+    public IslandBit(int width_position, int length_position, BitController bitController) {
         this.width_position = width_position;
         this.length_position = length_position;
+        this.bitController = bitController;
 
         spawnObjects();
+
         bitController.setCurrentBit(this);
+        setBasicObjectsController(this.bitController);
+
+        this.isEmpty= false;
     }
 
     private void spawnObjects() {
         Set<BasicObject> basicObjects = Property.ISLAND_EINTRIES;
 
         for (BasicObject basicObject : basicObjects) {
-            int howManyObjects = ThreadLocalRandom.current().nextInt(basicObject.getMaxCountInCell() + 1);
+            int max = basicObject.getMaxCountInCell();
+            int howManyObjects = ThreadLocalRandom.current().nextInt(max / 2, max);
+
 
             for (int i = 0; i < howManyObjects; i++) {
                 try {
@@ -54,6 +64,19 @@ public class IslandBit {
                 bitController.setBasicObject(basicObject);
                 abstractAnimal.action();
             }
+
+        }
+        updateListObjects();
+        checkEmpty();
+    }
+
+    public boolean getEmpty() {
+        return isEmpty;
+    }
+
+    private void checkEmpty() {
+        if(localBasicObjects == null || localBasicObjects.isEmpty() || localBasicObjects.size() == 0) {
+            isEmpty = true;
         }
     }
 
@@ -62,52 +85,31 @@ public class IslandBit {
             for (BasicObject basicObject : addObjects) {
                 localBasicObjects.add(basicObject);
             }
-            addObjects = new ArrayList<>();
+            addObjects.clear();
         }
 
         if(removeObjects != null && removeObjects.size() > 0) {
             for (BasicObject basicObject : removeObjects) {
                 localBasicObjects.remove(basicObject);
             }
-            removeObjects = new ArrayList<>();
+            removeObjects.clear();
         }
     }
 
     public void addToRemoveList(BasicObject basicObject) {
-        if(removeObjects == null) {
-            removeObjects = new ArrayList<>();
-        }
-
         removeObjects.add(basicObject);
     }
 
     public void addToAddList(BasicObject basicObject) {
-        if(addObjects == null) {
-            addObjects = new ArrayList<>();
-        }
-
+        basicObject.setBitController(bitController);
         addObjects.add(basicObject);
     }
 
-
-    public void addBasicObject (BasicObject basicObject) {
-        localBasicObjects.add(basicObject);
-    }
-
-    public void removeBasicObject (BasicObject basicObject) {
-        int index = localBasicObjects.indexOf(basicObject);
-        localBasicObjects.remove(index);
-    }
 
     public List<BasicObject> getLocalBasicObjects() {
         return this.localBasicObjects;
     }
 
-    public void setBitController(BitController bitController) {
-        this.bitController = bitController;
-
-        setBasicObjectsController(bitController);
-    }
 
     public void setBasicObjectsController(BitController bitController) {
         for (BasicObject basicObject : localBasicObjects) {
@@ -142,6 +144,14 @@ public class IslandBit {
             result.put(key, result.getOrDefault(key, 0) + 1);
         }
 
+        Map<String, Integer> empty = Property.EMPTY_ISLAND;
+
+        for (String key : empty.keySet()){
+            if (!result.containsKey(key)) {
+                result.put(key, empty.get(key));
+            }
+        }
+
         return result;
     }
 
@@ -160,13 +170,13 @@ public class IslandBit {
         int maxLen = getMaxLen(strings);
         StringBuilder builder = new StringBuilder();
 
-        builder.append(fillLine("", maxLen));
+        builder.append(fillLine(maxLen));
 
         for(String str: strings) {
             builder.append(fillLine(str, maxLen));
         }
 
-        builder.append(fillLine("", maxLen));
+        builder.append(fillLine(maxLen));
 
         return builder.toString();
     }
@@ -183,14 +193,25 @@ public class IslandBit {
         return result;
     }
 
+    String fillLine(int len) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            builder.append(Property.DELIMITER);
+        }
+        builder.append("\n");
+
+        return builder.toString();
+    }
+
     String fillLine(String str, int len) {
         StringBuilder builder = new StringBuilder();
 
         builder.append(Property.DELIMITER);
         builder.append(str);
-        for (int i = len - str.length(); i < len; i++) {
+        for (int i = str.length(); i < len; i++) {
             builder.append(" ");
         }
+        builder.append("\t");
         builder.append(Property.DELIMITER);
         builder.append("\n");
 

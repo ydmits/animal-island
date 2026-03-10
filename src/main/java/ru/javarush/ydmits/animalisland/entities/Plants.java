@@ -11,4 +11,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class Plants extends BasicObject{
 
+    @Override
+    public Plants clone() throws CloneNotSupportedException{
+        return (Plants) super.clone();
+    }
 }
