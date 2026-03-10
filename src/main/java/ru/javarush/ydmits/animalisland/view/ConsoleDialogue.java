@@ -10,7 +10,7 @@ public class ConsoleDialogue implements Dialogue{
 
         int counter = 0;
 
-        while (counter < Property.TIME_FOR_GAME_SIMULATION_SEC ) {
+        while (counter < Property.TIME_FOR_GAME_SIMULATION_SEC && !island.getEmpty()) {
             island.action();
             System.out.println(island);
             try {

@@ -47,12 +47,13 @@ public class IslandBit {
                 try {
                     BasicObject object = basicObject.clone();
 
-                    localBasicObjects.add(object);
+                    addObjects.add(object);
                 } catch (CloneNotSupportedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
+        updateListObjects();
     }
 
     public void action() {
@@ -63,11 +64,37 @@ public class IslandBit {
                 AbstractAnimal abstractAnimal = (AbstractAnimal) basicObject;
                 bitController.setBasicObject(basicObject);
                 abstractAnimal.action();
+                eventRandomExtraSpawnPlants();
             }
 
         }
         updateListObjects();
         checkEmpty();
+    }
+
+    private void eventRandomExtraSpawnPlants(){
+        double chance = ThreadLocalRandom.current().nextDouble(Property.MAX_CHANCE);
+
+        if(chance <= Property.CHANCE_EVENT_SPAWN_PLANTS + Property.EPSILON) {
+            for (BasicObject basicObject : Property.ISLAND_EINTRIES) {
+                String type = basicObject.getType();
+
+                if(Property.TYPE_PLANTS.equals(type)) {
+                    int max = basicObject.getMaxCountInCell();
+                    int howManyObjects = ThreadLocalRandom.current().nextInt(max);
+
+                    for (int i = 0; i < howManyObjects; i++) {
+                        try {
+                            BasicObject object = basicObject.clone();
+
+                            addObjects.add(object);
+                        } catch (CloneNotSupportedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public boolean getEmpty() {

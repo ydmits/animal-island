@@ -55,6 +55,8 @@ public enum IslandEntries {
         return objects;
     }
 
+
+
     private static Set<Map<String, Object>> modifyAnimalObjects (Set<Map<String, Object>> jsonContent) {
         for(Map<String, Object> jsonMap : jsonContent) {
             String typeObject = (String) jsonMap.get("type");
@@ -171,6 +173,8 @@ public enum IslandEntries {
 
         return result;
     }
+
+
 
 
 }

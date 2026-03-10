@@ -4,7 +4,6 @@ import ru.javarush.ydmits.animalisland.entities.BasicObject;
 import ru.javarush.ydmits.animalisland.file.FileLoader;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +20,8 @@ public class Property {
     public static final double COEFICIENT_FULL_EAT;
     public static final double MAX_DELTA_WEIGHT;
     public static final double COEFFICIENT_REPRODUCTION;
+    public static final double CHANCE_EVENT_SPAWN_PLANTS;
+    public static final double MAX_CHANCE;
 
     public static final boolean IS_ALIVE_DEFAULT;
     public static final boolean IS_NEED_EAT_DEFAULT;
@@ -76,6 +77,8 @@ public class Property {
         DELIMITER = (String) property.getOrDefault("delimiter", "\uD83D\uDFE9");
         TIME_FOR_GAME_SIMULATION_SEC = (int) property.getOrDefault("time_for_game_simulation_sec", 60);
         EMPTY_ISLAND = (Map<String, Integer>) property.getOrDefault("empty_island", DEFAULT_EMPTY_ISLAND);
+        CHANCE_EVENT_SPAWN_PLANTS = (double) property.getOrDefault("chance_event_spawn_plants", 3.0);
+        MAX_CHANCE = (double) property.getOrDefault("max_chance", 100.0);
 
         ISLAND_EINTRIES = IslandEntries.castIslandEntries(islandObjects);
 

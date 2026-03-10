@@ -21,5 +21,7 @@
     "\uD83C\uDF31": 0,
     "\uD83D\uDC04": 0,
     "\uD83D\uDC3A": 0
-  }
+  },
+  "chance_event_spawn_plants" : 0.1,
+  "max_chance" : 100.0
 }
