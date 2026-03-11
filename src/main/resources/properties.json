@@ -23,5 +23,6 @@
     "\uD83D\uDC3A": 0
   },
   "chance_event_spawn_plants" : 0.05,
-  "max_chance" : 100.0
+  "max_chance" : 100.0,
+  "count_partners_can_reproduct" : 2
 }

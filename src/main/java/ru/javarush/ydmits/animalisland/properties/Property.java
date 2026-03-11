@@ -13,6 +13,7 @@ public class Property {
     public static final int ISLAND_WIDTH;
     public static final int DEFAULT_EAT_CHANCE;
     public static final int TIME_FOR_GAME_SIMULATION_SEC;
+    public static final int COUNT_PARTNERS_CAN_REPRODUCT;
 
     public static final double EPSILON;
     public static final double COEFICIENT_EATING;
@@ -79,6 +80,7 @@ public class Property {
         EMPTY_ISLAND = (Map<String, Integer>) property.getOrDefault("empty_island", DEFAULT_EMPTY_ISLAND);
         CHANCE_EVENT_SPAWN_PLANTS = (double) property.getOrDefault("chance_event_spawn_plants", 0.1);
         MAX_CHANCE = (double) property.getOrDefault("max_chance", 100.0);
+        COUNT_PARTNERS_CAN_REPRODUCT = (int) property.getOrDefault("count_partners_can_reproduct", 2);
 
         ISLAND_EINTRIES = IslandEntries.castIslandEntries(islandObjects);
 

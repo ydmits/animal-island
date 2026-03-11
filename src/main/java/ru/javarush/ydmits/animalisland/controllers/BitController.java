@@ -4,6 +4,7 @@ import ru.javarush.ydmits.animalisland.entities.BasicObject;
 import ru.javarush.ydmits.animalisland.islands.Island;
 import ru.javarush.ydmits.animalisland.islands.IslandBit;
 import ru.javarush.ydmits.animalisland.properties.IslandEntries;
+import ru.javarush.ydmits.animalisland.properties.Property;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class BitController {
 
         int countThisObjectsInBit = getCountThisObjectsInBit();
 
-        if(countThisObjectsInBit < basicObject.getMaxCountInCell()) {
+        if(countThisObjectsInBit < basicObject.getMaxCountInCell() && countThisObjectsInBit >= Property.COUNT_PARTNERS_CAN_REPRODUCT) {
             result = true;
         }
 
