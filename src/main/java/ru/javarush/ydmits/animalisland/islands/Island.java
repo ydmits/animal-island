@@ -5,13 +5,24 @@ import ru.javarush.ydmits.animalisland.properties.Property;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Island {
-    private IslandBit[][] islandBits = new IslandBit[Property.ISLAND_WIDTH][Property.ISLAND_LENGTH];
+    private IslandBit[][] islandBits;
 
     private boolean isEmpty;
 
+    private ExecutorService cellExecutor;
+
     public Island() {
+        islandBits = new IslandBit[Property.ISLAND_WIDTH][Property.ISLAND_LENGTH];
+
+        int cores = Runtime.getRuntime().availableProcessors();
+        cellExecutor = Executors.newFixedThreadPool(cores);
+
         for (int i = 0; i < islandBits.length; i++) {
             for (int j = 0; j < islandBits[i].length; j++) {
                 BitController bitController = new BitController();
@@ -25,13 +36,36 @@ public class Island {
     }
 
     public void action() {
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+
         for (int i = 0; i < islandBits.length; i++) {
             for (int j = 0; j < islandBits[i].length; j++) {
-                islandBits[i][j].action();
+                final int x = i;
+                final int y = j;
+
+                CompletableFuture<Void> future = CompletableFuture.runAsync(() -> islandBits[x][y].action(), cellExecutor);
+                futures.add(future);
+
+                //islandBits[i][j].action();
             }
         }
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
         checkEmpty();
+    }
+
+    public void shutdown() {
+        if (cellExecutor != null && !cellExecutor.isShutdown()) {
+            cellExecutor.shutdown();
+            try {
+                if (!cellExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
+                    cellExecutor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                cellExecutor.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public boolean getEmpty() {

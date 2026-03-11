@@ -77,7 +77,7 @@ public class Property {
         DELIMITER = (String) property.getOrDefault("delimiter", "\uD83D\uDFE9");
         TIME_FOR_GAME_SIMULATION_SEC = (int) property.getOrDefault("time_for_game_simulation_sec", 60);
         EMPTY_ISLAND = (Map<String, Integer>) property.getOrDefault("empty_island", DEFAULT_EMPTY_ISLAND);
-        CHANCE_EVENT_SPAWN_PLANTS = (double) property.getOrDefault("chance_event_spawn_plants", 3.0);
+        CHANCE_EVENT_SPAWN_PLANTS = (double) property.getOrDefault("chance_event_spawn_plants", 0.1);
         MAX_CHANCE = (double) property.getOrDefault("max_chance", 100.0);
 
         ISLAND_EINTRIES = IslandEntries.castIslandEntries(islandObjects);

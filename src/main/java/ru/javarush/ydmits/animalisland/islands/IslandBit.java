@@ -8,12 +8,14 @@ import ru.javarush.ydmits.animalisland.properties.IslandEntries;
 import ru.javarush.ydmits.animalisland.properties.Property;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class IslandBit {
-    private List<BasicObject> localBasicObjects = new ArrayList<>();
-    private List<BasicObject> addObjects = new ArrayList<>();
-    private List<BasicObject> removeObjects = new ArrayList<>();
+    private List<BasicObject> localBasicObjects = new CopyOnWriteArrayList<>();
+    private List<BasicObject> addObjects = new CopyOnWriteArrayList<>();
+    private List<BasicObject> removeObjects = new CopyOnWriteArrayList<>();
 
     private int width_position;
     private int length_position;
@@ -21,6 +23,8 @@ public class IslandBit {
     private BitController bitController;
 
     private boolean isEmpty;
+
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public IslandBit(int width_position, int length_position, BitController bitController) {
         this.width_position = width_position;
@@ -57,14 +61,18 @@ public class IslandBit {
     }
 
     public void action() {
-        updateListObjects();
+        List<BasicObject> objectsForAction = new ArrayList<>(localBasicObjects);
 
-        for (BasicObject basicObject : localBasicObjects) {
-            if(IslandEntries.canDoAction(basicObject)) {
-                AbstractAnimal abstractAnimal = (AbstractAnimal) basicObject;
+        for (BasicObject basicObject : objectsForAction) {
+            if(basicObject.isAlive() && localBasicObjects.contains(basicObject) && IslandEntries.canDoAction(basicObject)) {
+                lock.writeLock().lock();
                 bitController.setBasicObject(basicObject);
+                lock.writeLock().unlock();
+
+                AbstractAnimal abstractAnimal = (AbstractAnimal) basicObject;
                 abstractAnimal.action();
                 eventRandomExtraSpawnPlants();
+
             }
 
         }
@@ -87,7 +95,7 @@ public class IslandBit {
                         try {
                             BasicObject object = basicObject.clone();
 
-                            addObjects.add(object);
+                            addToAddList(object);
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
                         }
@@ -98,50 +106,78 @@ public class IslandBit {
     }
 
     public boolean getEmpty() {
-        return isEmpty;
+        lock.readLock().lock();
+        try {
+            return isEmpty;
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
     private void checkEmpty() {
-        if(localBasicObjects == null || localBasicObjects.isEmpty() || localBasicObjects.size() == 0) {
-            isEmpty = true;
+        lock.writeLock().lock();
+        try {
+            isEmpty = localBasicObjects == null || localBasicObjects.isEmpty();
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
     public void updateListObjects() {
-        if(addObjects != null && addObjects.size() > 0) {
-            for (BasicObject basicObject : addObjects) {
-                localBasicObjects.add(basicObject);
+        lock.writeLock().lock();
+        try {
+            if (addObjects != null && !addObjects.isEmpty()) {
+                localBasicObjects.addAll(addObjects);
+                addObjects.clear();
             }
-            addObjects.clear();
-        }
 
-        if(removeObjects != null && removeObjects.size() > 0) {
-            for (BasicObject basicObject : removeObjects) {
-                localBasicObjects.remove(basicObject);
+            if (removeObjects != null && !removeObjects.isEmpty()) {
+                localBasicObjects.removeAll(removeObjects);
+                removeObjects.clear();
             }
-            removeObjects.clear();
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
     public void addToRemoveList(BasicObject basicObject) {
-        removeObjects.add(basicObject);
+        lock.writeLock().lock();
+        try {
+            removeObjects.add(basicObject);
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     public void addToAddList(BasicObject basicObject) {
-        basicObject.setBitController(bitController);
-        addObjects.add(basicObject);
+        lock.writeLock().lock();
+        try {
+            basicObject.setBitController(bitController);
+            addObjects.add(basicObject);
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
 
     public List<BasicObject> getLocalBasicObjects() {
-        return this.localBasicObjects;
+        lock.readLock().lock();
+        try {
+            return localBasicObjects;
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
 
     public void setBasicObjectsController(BitController bitController) {
-        for (BasicObject basicObject : localBasicObjects) {
-
-            basicObject.setBitController(bitController);
+        lock.readLock().lock();
+        try {
+            for (BasicObject basicObject : localBasicObjects) {
+                basicObject.setBitController(bitController);
+            }
+        } finally {
+            lock.readLock().unlock();
         }
     }
 
@@ -155,7 +191,15 @@ public class IslandBit {
 
     @Override
     public String toString() {
-        Map<String, Integer> intBits = getMapBit();
+        Map<String, Integer> intBits;
+
+        lock.readLock().lock();
+        try {
+            intBits = getMapBit();
+        } finally {
+            lock.readLock().unlock();
+        }
+
         List<String> strings = getBitsStrings(intBits);
         String result = strView(strings);
 
@@ -209,15 +253,12 @@ public class IslandBit {
     }
 
     private int getMaxLen(List<String> strings){
-        int result = Integer.MIN_VALUE;
 
-        for(String str : strings) {
-            if(str.length() > result) {
-                result = str.length();
-            }
-        }
-
-        return result;
+        return strings
+                .stream()
+                .mapToInt(String::length)
+                .max()
+                .orElse(0);
     }
 
     String fillLine(int len) {

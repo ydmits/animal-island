@@ -9,5 +9,6 @@ public class Main {
 
         Dialogue dialogue = new ConsoleDialogue();
         dialogue.run();
+
     }
 }
