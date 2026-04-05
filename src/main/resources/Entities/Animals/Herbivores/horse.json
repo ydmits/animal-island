@@ -1,0 +1,12 @@
+{
+  "name" : "horse",
+  "view" : "\uD83D\uDC34",
+  "type" : "herbivores",
+  "weight" : 400,
+  "max_count_in_cell" : 20,
+  "speed_cell" : 4,
+  "eat_full_how_many" : 60,
+  "eat_chance" : {
+    "grass" : 100
+  }
+}

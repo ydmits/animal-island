@@ -1,0 +1,12 @@
+{
+  "name" : "caterpillar",
+  "view" : "\uD83D\uDC1B",
+  "type" : "herbivores",
+  "weight" : 0.01,
+  "max_count_in_cell" : 1000,
+  "speed_cell" : 0,
+  "eat_full_how_many" : 0,
+  "eat_chance" : {
+    "grass" : 100
+  }
+}

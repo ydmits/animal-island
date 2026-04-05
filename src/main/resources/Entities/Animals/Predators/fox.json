@@ -1,0 +1,15 @@
+{
+  "name" : "fox",
+  "view" : "\uD83E\uDD8A",
+  "type" : "predators",
+  "weight" : 8,
+  "max_count_in_cell" : 30,
+  "speed_cell" : 2,
+  "eat_full_how_many" : 2,
+  "eat_chance" : {
+    "rabbit" : 70,
+    "mouse" : 90,
+    "duck" : 60,
+    "caterpillar" : 40
+  }
+}

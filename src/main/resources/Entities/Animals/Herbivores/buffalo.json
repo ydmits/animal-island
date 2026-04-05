@@ -1,0 +1,12 @@
+{
+  "name" : "buffalo",
+  "view" : "\uD83D\uDC03",
+  "type" : "herbivores",
+  "weight" : 700,
+  "max_count_in_cell" : 10,
+  "speed_cell" : 3,
+  "eat_full_how_many" : 100,
+  "eat_chance" : {
+    "grass" : 100
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name" : "bear",
+  "view" : "\uD83D\uDC3B",
+  "type" : "predators",
+  "weight" : 500,
+  "max_count_in_cell" : 5,
+  "speed_cell" : 2,
+  "eat_full_how_many" : 80,
+  "eat_chance" : {
+    "boa" : 80,
+    "horse" : 40,
+    "deer" : 80,
+    "rabbit" : 80,
+    "mouse" : 90,
+    "goat" : 70,
+    "sheep" : 70,
+    "boar" : 50,
+    "buffalo" : 20,
+    "duck" : 10
+  }
+}

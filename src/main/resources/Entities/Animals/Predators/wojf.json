@@ -1,0 +1,20 @@
+{
+  "name" : "wolf",
+  "view" : "\uD83D\uDC3A",
+  "type" : "predators",
+  "weight" : 50,
+  "max_count_in_cell" : 30,
+  "speed_cell" : 3,
+  "eat_full_how_many" : 8,
+  "eat_chance" : {
+    "horse" : 10,
+    "deer" : 15,
+    "rabbit" : 60,
+    "mouse" : 80,
+    "goat" : 60,
+    "sheep" : 70,
+    "boar" : 15,
+    "buffalo" : 10,
+    "duck" : 40
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name" : "goat",
+  "view" : "\uD83D\uDC10",
+  "type" : "herbivores",
+  "weight" : 60,
+  "max_count_in_cell" : 140,
+  "speed_cell" : 3,
+  "eat_full_how_many" : 10,
+  "eat_chance" : {
+    "grass" : 100
+  }
+}

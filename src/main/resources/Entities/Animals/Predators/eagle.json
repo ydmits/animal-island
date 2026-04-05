@@ -1,0 +1,15 @@
+{
+  "name" : "eagle",
+  "view" : "\uD83E\uDD85",
+  "type" : "predators",
+  "weight" : 6,
+  "max_count_in_cell" : 20,
+  "speed_cell" : 3,
+  "eat_full_how_many" : 1,
+  "eat_chance" : {
+    "fox" : 10,
+    "rabbit" : 90,
+    "mouse" : 90,
+    "duck" : 80
+  }
+}

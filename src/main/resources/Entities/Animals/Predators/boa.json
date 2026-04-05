@@ -1,0 +1,15 @@
+{
+  "name" : "boa",
+  "view" : "\uD83D\uDC0D",
+  "type" : "predators",
+  "weight" : 15,
+  "max_count_in_cell" : 30,
+  "speed_cell" : 1,
+  "eat_full_how_many" : 3,
+  "eat_chance" : {
+    "fox" : 15,
+    "rabbit" : 20,
+    "mouse" : 40,
+    "duck" : 10
+  }
+}
